@@ -1,0 +1,76 @@
+### BHARAT INTERN: MACHINE LEARNING INTERNSHIP
+### TASK 1: WINE QUALITY PREDICTION 
+### BY ASHIMA PILLAI 
+
+
+# Importing necessary libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sb
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score,classification_report,confusion_matrix
+
+
+data = pd.read_csv('WineQT.csv')
+
+print(data.head())
+
+data.info()
+
+data.describe().T
+
+data.isnull().sum()
+
+### Let’s draw the histogram to visualise the distribution of the data with continuous values in the columns of the dataset 
+
+data.hist(bins=20, figsize=(10,10))
+plt.show()
+
+plt.bar(data['quality'], data['alcohol'])
+plt.xlabel('quality')
+plt.ylabel('alcohol')
+plt.show()
+
+
+### Heat Map 
+
+plt.figure(figsize=(12,12))
+sb.heatmap(data.corr() > 0.7,annot=True, cbar=False)
+plt.show()
+
+
+x =data[['fixed acidity', 'volatile acidity','citric acid','alcohol']].values
+y=data['quality'].values
+
+### Split the data into training and Testing sets
+x_train, x_test, y_train,y_test = train_test_split(x,y,test_size=0.2,random_state=42) 
+
+Create and train the logistic Regression model
+model = LogisticRegression(max_iter=1000)
+model.fit(x_train,y_train)
+
+Make predictions on the test set
+y_pred = model.predict(x_test)
+
+
+Evaluate the model
+accuracy = accuracy_score(y_test,y_pred)
+print(f"Accuracy:{accuracy}")
+
+### Generating output
+print("Classification Report:")
+print(classification_report(y_test,y_pred))
+
+
+Confusion matrix
+conf_matrix = confusion_matrix(y_test,y_pred)
+print("Confusion Matrix:")
+print(conf_matrix)
+
+
+
+
+
+
